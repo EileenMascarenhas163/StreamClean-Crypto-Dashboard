@@ -1,0 +1,3 @@
+v1
+{"path":"file:///app/data/parquet/raw/date=2025-08-15/coin=ethereum/part-00000-28f680f3-2662-469b-8392-a5bdc75057f2.c000.snappy.parquet","size":1816,"isDir":false,"modificationTime":1755263462138,"blockReplication":1,"blockSize":33554432,"action":"add"}
+{"path":"file:///app/data/parquet/raw/date=2025-08-15/coin=bitcoin/part-00001-903510b7-2a8c-4c86-aacf-6725937989db.c000.snappy.parquet","size":1817,"isDir":false,"modificationTime":1755263462099,"blockReplication":1,"blockSize":33554432,"action":"add"}

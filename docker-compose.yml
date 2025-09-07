@@ -1,0 +1,54 @@
+
+services:
+  zookeeper:
+    image: 'bitnami/zookeeper:3.8'
+    container_name: streamclean-zookeeper-1
+    ports:
+      - '2181:2181'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - app-tier
+  kafka:
+    image: 'bitnami/kafka:3.4'
+    container_name: streamclean-kafka-1
+    ports:
+      - '9092:9092'
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_NUM_PARTITIONS=3
+      - KAFKA_CFG_DEFAULT_REPLICATION_FACTOR=1
+      - KAFKA_CFG_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - BITNAMI_DEBUG=true
+    depends_on:
+      - zookeeper
+    networks:
+      - app-tier
+  streamlit:
+    build: .
+    container_name: streamclean-streamlit
+    ports:
+      - '8501:8501'
+    volumes:
+      - .:/app
+    command: streamlit run dashboard.py --server.port 8501
+    networks:
+      - app-tier
+  prefect:
+    build: .
+    container_name: streamclean-prefect
+    volumes:
+      - .:/app
+    command: prefect server start
+    ports:
+      - '4200:4200'
+    networks:
+      - app-tier
+networks:
+  app-tier:
+    driver: bridge
